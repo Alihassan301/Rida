@@ -7,7 +7,7 @@ import type { Chapter, Memory, WishFlower } from '../types/gift';
  * ─────────────────────────────────────────────
  */
 
-export const name = 'Rida Ji';
+export const name = 'Rida';
 
 export const opening = {
   lines: ['Something special...', 'has been made for you.'],
