@@ -9,40 +9,5 @@
   <body>
     <div id="root"></div>
     <script type="module" src="/src/index.tsx"></script>
-    <script>
-      window.addEventListener('load', function () {
-        setTimeout(function () {
-          var vw = document.documentElement.clientWidth;
-          var out = [];
-          out.push('VIEWPORT=' + vw + 'x' + document.documentElement.clientHeight);
-          out.push('docScrollW=' + document.documentElement.scrollWidth + ' bodyScrollW=' + document.body.scrollWidth);
-          var els = document.querySelectorAll('body *');
-          els.forEach(function (el) {
-            var tag = el.tagName.toLowerCase();
-            if (tag === 'svg' || tag === 'canvas' || tag === 'path' || tag === 'script' || tag === 'style') return;
-            if (el.closest('[aria-hidden="true"]')) return;
-            if (!el.textContent || !el.textContent.trim()) return;
-            var cs = getComputedStyle(el);
-            if (cs.position === 'absolute' || cs.position === 'fixed') return;
-            var r = el.getBoundingClientRect();
-            if (r.width <= 0 || r.height <= 0) return;
-            if (r.right > vw + 1 || r.left < -1) {
-              out.push('HOVERFLOW <' + tag + '> L=' + Math.round(r.left) + ' R=' + Math.round(r.right) + ' W=' + Math.round(r.width) + ' :: ' + (el.className || '').toString().slice(0, 70) + ' :: ' + el.textContent.trim().slice(0, 30));
-            }
-          });
-          var secs = document.querySelectorAll('section, [data-chapter]');
-          secs.forEach(function (s) {
-            if (s.scrollHeight - s.clientHeight > 4) {
-              out.push('VCLIP ' + (s.id || s.getAttribute('data-chapter')) + ' sh=' + s.scrollHeight + ' ch=' + s.clientHeight + ' :: ' + (s.className || '').toString().slice(0, 70));
-            }
-          });
-          var pre = document.createElement('pre');
-          pre.id = '__layout_debug';
-          pre.textContent = out.join('\n');
-          document.body.appendChild(pre);
-          try { fetch('/__report', { method: 'POST', body: encodeURIComponent(out.join('\n')) }); } catch (e) {}
-        }, 3500);
-      });
-    </script>
   </body>
 </html>
